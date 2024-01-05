@@ -1,17 +1,15 @@
 
-uses Go api starter kit for boilerplate -> https://github.com/qiangxue/go-rest-api 
 
 Adds following features
 * JWT-based authentication
 * Rate limiting for each user
 * Share notes with users
 * Search using Postgres full text search
-* Tests
+* Tests for notes api and auth
  
 TODO: 
 - salt and hash passwords
 - add indexes to tables
-- add more tests
 
 ## Getting Started
 
@@ -130,3 +128,6 @@ via `make run`.
 ```
 
 ```
+
+uses Go api starter kit for initial boilerplate -> https://github.com/qiangxue/go-rest-api 
+

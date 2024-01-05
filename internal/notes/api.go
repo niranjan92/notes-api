@@ -7,6 +7,7 @@ import (
 	"github.com/qiangxue/go-rest-api/internal/entity"
 	"github.com/qiangxue/go-rest-api/internal/errors"
 	"github.com/qiangxue/go-rest-api/pkg/log"
+	"github.com/qiangxue/go-rest-api/pkg/pagination"
 )
 
 // RegisterHandlers sets up the routing of the HTTP handlers.
@@ -57,10 +58,17 @@ func (r resource) search(c *routing.Context) error {
 
 func (r resource) query(c *routing.Context) error {
 	ctx := c.Request.Context()
+
 	userId, ok := c.Get("user_id").(string)
 	if !ok {
 		return errors.Unauthorized("user not found")
 	}
+
+	count, err := r.service.Count(ctx)
+	if err != nil {
+		return err
+	}
+	pages := pagination.NewFromRequest(c.Request, count)
 
 	// fetch notes where user_id = userId
 	notes, err := r.service.QueryByUser(ctx, userId)
@@ -75,7 +83,9 @@ func (r resource) query(c *routing.Context) error {
 	}
 	notes = append(notes, sharedNotes...)
 
-	return c.Write(notes)
+	pages.Items = notes
+
+	return c.Write(pages)
 }
 
 func (r resource) share(c *routing.Context) error {

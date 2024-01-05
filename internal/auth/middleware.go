@@ -93,7 +93,9 @@ func MockAuthHandler(c *routing.Context) error {
 	if c.Request.Header.Get("Authorization") != "TEST" {
 		return errors.Unauthorized("")
 	}
-	ctx := WithUser(c.Request.Context(), "100", "Tester")
+	ctx := WithUser(c.Request.Context(), "testuser", "Tester")
+	c.Set("user_id", "testuser")
+
 	c.Request = c.Request.WithContext(ctx)
 	return nil
 }
